@@ -4,11 +4,8 @@ const Choices = {
     Scissor: "SCISSOR",
 }
 
-function getType(text) {
-    if (text.toUpperCase() === "ROCK") return Choices.Rock
-    if (text.toUpperCase() === "PAPER") return Choices.Paper
-    return Choices.Scissor
-}
+let yourWins = 0
+let computerWins = 0
 
 function getRandomInt() {
     return Math.floor(Math.random() * 700)
@@ -36,16 +33,18 @@ function getComputerMove() {
     return choice
 }
 
-function playRound(player, computer) {
-    let playerChoice = getType(player),
-        computerChoice = getType(computer)
+function playRound(playerChoice) {
+    let computerChoice = getComputerMove()
+    console.log(playerChoice + " " + computerChoice)
 
     if (playerChoice === computerChoice) return "Its a draw!"
     let win = didPlayerWin(playerChoice, computerChoice)
     if (win) {
-        return "You won! " + playerChoice + " beats " + computerChoice
+        yourWins++
+        return "You won! " + playerChoice + " beats " + computerChoice + ". You have " + yourWins + " wins."
     } else {
-        return "You lose! " + computerChoice + " beats " + playerChoice
+        computerWins++
+        return "You lose! " + computerChoice + " beats " + playerChoice + ". You have " + yourWins + " wins."
     }
 }
 
@@ -60,13 +59,21 @@ function didPlayerWin(playerChoice, computerChoice) {
     }
 }
 
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        let computerChoice = getComputerMove(),
-            playerChoice
-        playerChoice = prompt("Bitte gebe deinen nächsten Wurf an:", "Paper")
-        console.log(playerChoice)
-        console.log(computerChoice)
-        console.log(playRound(playerChoice, computerChoice))
+function playGame(playerChoice) {
+    let resultDiv = document.querySelector("#result")
+    resultDiv.innerHTML = playRound(playerChoice)
+
+    if (yourWins === 5) {
+        resultDiv.innerHTML = "You Won the game!"
+        yourWins = 0
+        computerWins = 0
+    } else if (computerWins === 5) {
+        resultDiv.innerHTML = "The computer won!"
+        yourWins = 0
+        computerWins = 0
     }
+}
+
+function displayWinMessage() {
+
 }
